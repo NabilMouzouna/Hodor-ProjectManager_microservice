@@ -6,6 +6,5 @@ import { userType } from "./userType"
     developer: userType,
     users?: userType[],
     providers: string[],
-    API_KEY : string,
   }
   export default projectType

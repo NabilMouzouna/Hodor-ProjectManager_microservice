@@ -6,23 +6,6 @@ const updateProjectById = async (req: Request, res: Response) => {
         const projectId = req.params.projectId;
         const updatedData = req.body;
 
-        console.log(projectId)
-        console.log(updatedData)
-        // Check if the project exists
-        const project = await Project.findById(projectId);
-
-        if (!project) {
-            return res.status(404).json({ error: "Project not found" });
-        }
-
-        // If newUser data is provided in the request body, add it to the project's users array
-        if (updatedData.newUser) {
-            project.users.push(updatedData.newUser._id);
-        }
-
-        // Save the updated project
-        await project.save();
-
         // Use findByIdAndUpdate to find and update the project
         const updatedProject = await Project.findByIdAndUpdate(projectId, updatedData, {
             new: true, // Return the updated document

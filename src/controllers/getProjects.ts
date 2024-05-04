@@ -1,41 +1,33 @@
-import { Request, Response } from "express"
-import Project from "../models/project"
+import { Request, Response } from "express";
+import Project from "../models/project";
+import { GetProjectsSuccessResponseType } from "../types/responseType";
 
-// getAll Projects 
-const getProjects = async (req: Request, res: Response) => {
-    try {
-        const projects = await Project.find()
-
-        // Send projects in the response
-        return res.status(200).json(projects)
-    } catch (error) {
-
-        // Handle any errors
-        console.error("Error retrieving projects:", error)
-        return res.status(500).json({ error: "Internal server error" })
-    }
-};
 // getUsers filtered by Developer ID
-export const getFilteredProjects = async (req: Request, res: Response) => {
-
-
+const getFilteredProjects = async (req: Request, res: Response) => {
     try {
-        let query = {}; // Default empty query
+        const { developer } = req.query;
 
-        // Check if developerId query parameter is provided
-        if (req.query.developer) {
-            query = { developer: req.query.developer };
+        // Check if developer is provided and is a valid string
+        if (!developer || typeof developer !== "string") {
+            return res.status(400).json({ error: "Invalid or missing developer parameter" });
         }
 
-        const projects = await Project.find(query);
+        // Find projects for the specified developer
+        const projects = await Project.find({ developer });
+
+        const response: GetProjectsSuccessResponseType = {
+            message: "Your Projects",
+            totalProjects: projects.length,
+            projects
+        };
 
         // Send projects in the response
-        return res.status(200).json(projects);
+        return res.status(200).json(response);
     } catch (error) {
         // Handle any errors
         console.error("Error retrieving projects:", error);
         return res.status(500).json({ error: "Internal server error" });
     }
+};
 
-}
-export default getProjects;
+export default getFilteredProjects;

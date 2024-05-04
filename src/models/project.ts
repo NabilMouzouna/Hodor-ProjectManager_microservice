@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import user from './user';
+
 
 const projectSchema = new Schema({
   projectName: {

@@ -4,7 +4,7 @@ import { SuccessResponseType } from "../types/responseType";
 import projectType from "../types/projectType";
 import { userType } from "../types/userType";
 import user from "../models/user";
-import { sign } from "jsonwebtoken"
+// import { sign } from "jsonwebtoken"
 
 
 const createProject = async (req: Request, res: Response) => {
@@ -25,11 +25,9 @@ const createProject = async (req: Request, res: Response) => {
         const project = await Project.create(projectInfo);
 
         // Sign an API Key
-        const API_KEY = sign({projectId: projectInfo.projectId , developer : projectInfo.developer.userId}, process.env.API_SECRET_KEY! )
         // Prepare success response
         const response: SuccessResponseType = {
             message: "Project created successfully",
-
             project: {
                 projectId: project.id,
                 projectName: project.projectName,
@@ -40,8 +38,7 @@ const createProject = async (req: Request, res: Response) => {
                     profilePicture: developer.profilePicture
                 },
                 providers: project.providers,
-                API_KEY
-            },
+            }
         };
 
         // Send success response
